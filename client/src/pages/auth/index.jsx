@@ -56,6 +56,7 @@ const Auth = () => {
                 setUserInfo(response.data.user)
                 if (response.data.user.profileSetup) navigate("/chat")
                 else navigate("/profile")
+                console.log(response.data.user.profileSetup)
             }
             console.log(response)
             toast.message("User Login Successfull")
