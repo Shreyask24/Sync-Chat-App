@@ -33,13 +33,14 @@ const App = () => {
           withCredentials: true,
         })
 
-        if (response.data === 200 && response.data.id) {
+        if (response.status === 200 && response.data.id) {
           setUserInfo(response.data)
         } else {
           setUserInfo(undefined)
         }
         console.log({ response })
       } catch (error) {
+        setUserInfo(undefined)
         console.error(error)
       } finally {
         setLoading(false)
@@ -61,8 +62,8 @@ const App = () => {
     <BrowserRouter>
       <Routes>
         <Route path="/auth" element={<AuthRoute><Auth /></AuthRoute>} />
-        <Route path="/chat" element={<PrivateRoute><Chat /></PrivateRoute>} />
         <Route path="/profile" element={<PrivateRoute><Profile /></PrivateRoute>} />
+        <Route path="/chat" element={<PrivateRoute><Chat /></PrivateRoute>} />
 
         <Route path="*" element={<Navigate to="/auth" />} />
       </Routes>

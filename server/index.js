@@ -20,6 +20,8 @@ const corsOptions = {
 
 app.use(cors(corsOptions))
 
+app.use("/uploads/profiles", express.static("uploads/profiles"))
+
 app.use(cookieParser())
 app.use(express.json())
 

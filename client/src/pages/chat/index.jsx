@@ -13,7 +13,7 @@ const Chat = () => {
             navigate("/profile")
         }
 
-    }, [navigate, userInfo])
+    }, [userInfo, navigate])
 
     return (
         <div>Chat</div>
