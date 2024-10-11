@@ -2,17 +2,29 @@ import { Avatar, AvatarImage } from "@/components/ui/avatar"
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { getColor } from "@/lib/utils";
 import { useAppStore } from "@/store"
-import { HOST } from "@/utils/constants";
+import { HOST, LOGOUT_ROUTE } from "@/utils/constants";
 import { FiEdit2 } from "react-icons/fi";
 import { useNavigate } from "react-router-dom";
 import { IoPowerSharp } from "react-icons/io5";
+import { apiClient } from "@/lib/api-client";
+import { toast } from "sonner";
 
 const ProfileInfo = () => {
     const navigate = useNavigate()
-    const { userInfo } = useAppStore();
+    const { userInfo, setUserInfo } = useAppStore();
 
-    const handleLogout = () => {
+    const handleLogout = async () => {
+        try {
+            const response = await apiClient.post(LOGOUT_ROUTE, {}, { withCredentials: true })
 
+            if (response.status === 200) {
+                navigate("/auth")
+                setUserInfo(null)
+                toast.success("User Logout Successfully")
+            }
+        } catch (error) {
+            console.log(error)
+        }
     }
 
     return (
