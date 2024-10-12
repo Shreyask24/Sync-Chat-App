@@ -23,7 +23,7 @@ const Chat = () => {
 
             <ContactsContainer />
             {/* <EmptyChatContainer /> */}
-            <ChatContainer />
+            {/* <ChatContainer /> */}
 
         </div>
     )
