@@ -5,6 +5,7 @@ import jwt from "jsonwebtoken"
 import mongoose from "mongoose"
 import dotenv from "dotenv"
 import authRoutes from "./routes/AuthRoute.js"
+import contactRoutes from "./routes/ContactRoutes.js"
 
 dotenv.config();
 
@@ -26,6 +27,7 @@ app.use(cookieParser())
 app.use(express.json())
 
 app.use("/api/auth", authRoutes)
+app.use("/api/contacts", contactRoutes)
 
 const server = app.listen(port, () => {
     console.log(`Server is running on port http://localhost:${port}/`)
