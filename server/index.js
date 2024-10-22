@@ -1,11 +1,11 @@
 import express from "express"
 import cors from "cors"
 import cookieParser from "cookie-parser"
-import jwt from "jsonwebtoken"
 import mongoose from "mongoose"
 import dotenv from "dotenv"
 import authRoutes from "./routes/AuthRoute.js"
 import contactRoutes from "./routes/ContactRoutes.js"
+import setupSocket from "./socket.js"
 
 dotenv.config();
 
@@ -32,5 +32,7 @@ app.use("/api/contacts", contactRoutes)
 const server = app.listen(port, () => {
     console.log(`Server is running on port http://localhost:${port}/`)
 })
+
+setupSocket(server)
 
 mongoose.connect(databaseURL).then(() => console.log("Database Connected Successfully.")).catch((err) => console.log(err.message))
