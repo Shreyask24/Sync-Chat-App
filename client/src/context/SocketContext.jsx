@@ -11,7 +11,7 @@ export const useSocket = () => {
 
 export const SocketProvider = ({ children }) => {
     const socket = useRef();
-    const { userInfo, selectedChatData, selectedChatType, addMessage } = useAppStore();
+    const { userInfo } = useAppStore();
 
 
     useEffect(() => {
@@ -27,45 +27,22 @@ export const SocketProvider = ({ children }) => {
             });
 
             const handleReceiveMessage = (message) => {
-                // Ensure selectedChatData and selectedChatType are defined
-                if (!selectedChatData) {
-                    console.error("Error: No selectedChatData available.");
-                    return;
-                }
-                if (selectedChatType === undefined) {
-                    console.error("Error: No selectedChatType defined.");
-                    return;
-                }
+                const { selectedChatData, selectedChatType, addMessage } = useAppStore.getState()
 
-                console.log("Checking message:", message);
-                console.log("Selected chat type:", selectedChatType);
-                console.log("Selected chat data ID:", selectedChatData._id);
-
-                // Check if message sender or recipient matches selectedChatData
-                const isSenderMatch = message.sender && selectedChatData._id === message.sender._id;
-                const isRecipientMatch = message.recipient && selectedChatData._id === message.recipient._id;
-
-                if (isSenderMatch || isRecipientMatch) {
-                    console.log("Conditions met for message processing");
-                    addMessage(message); // Add message to state
-                    console.log("Message received:", message);
-                    console.log("Current selected chat data:", selectedChatData);
-                } else {
-                    console.log("Conditions not met; message not processed");
+                if (selectedChatType !== undefined && (selectedChatData._id === message.sender._id || selectedChatData._id === message.recipient._id)) {
+                    console.log("Message rc", message)
+                    addMessage(message)
                 }
             };
 
-            // Set up the event listener for incoming messages
-            socket.current.on("receiveMessage", (message) => {
-                handleReceiveMessage(message);
-            });
+            socket.current.on("receiveMessage", handleReceiveMessage)
 
 
             return () => {
                 socket.current.disconnect();
             };
         }
-    }, [userInfo, selectedChatData, selectedChatType]);
+    }, [userInfo]);
 
     return (
         <SocketContext.Provider value={socket.current}>

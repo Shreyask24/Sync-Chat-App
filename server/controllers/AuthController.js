@@ -92,7 +92,9 @@ export const getUserInfo = async (req, res, next) => {
     try {
         const userData = User.findById(req.userId)
 
-        if (!userData) return res.status(404).send("User with the given ID not found")
+        if (!userData) {
+            res.status(404).send("User with the given ID not found")
+        }
 
         return res.status(200).json({
             id: userData.id,

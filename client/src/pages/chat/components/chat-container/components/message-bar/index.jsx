@@ -8,10 +8,10 @@ import { RiEmojiStickerLine } from 'react-icons/ri';
 
 const MessageBar = () => {
     const emojiRef = useRef();
+    const socket = useSocket();
 
     const [message, setMessage] = useState("");
     const [emojiPickerOpen, setEmojiPickerOpen] = useState(false);
-    const socket = useSocket()
     const { selectedChatType, selectedChatData, userInfo } = useAppStore()
 
 
