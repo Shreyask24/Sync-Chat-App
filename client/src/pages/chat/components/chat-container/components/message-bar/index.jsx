@@ -1,3 +1,5 @@
+import { useSocket } from '@/context/SocketContext';
+import { useAppStore } from '@/store';
 import EmojiPicker from 'emoji-picker-react';
 import React, { useEffect, useRef, useState } from 'react'
 import { GrAttachment } from "react-icons/gr"
@@ -9,6 +11,9 @@ const MessageBar = () => {
 
     const [message, setMessage] = useState("");
     const [emojiPickerOpen, setEmojiPickerOpen] = useState(false);
+    const socket = useSocket()
+    const { selectedChatType, selectedChatData, userInfo } = useAppStore()
+
 
     useEffect(() => {
         function handleClickOutside(e) {
@@ -27,7 +32,16 @@ const MessageBar = () => {
     }
 
     const handleSendMessage = async () => {
-
+        if (selectedChatType === "contact") {
+            socket.emit("sendMessage", {
+                sender: userInfo.id,
+                content: message,
+                recipient: selectedChatData._id,
+                messageType: "text",
+                fileUrl: undefined
+            })
+        }
+        console.log("Received sendMessage event with:", message);
     }
     return (
         <div className='h-[10vh] bg-[#1c1d25] flex justify-center items-center px-8 mb-6 gap-6'>

@@ -86,7 +86,7 @@ const NewDM = () => {
                                         <div key={contact._id} className="flex gap-3 items-center cursor-pointer" onClick={() => selectNewContact(contact)}>
                                             <div className="w-12 h-12 relative">
                                                 <Avatar className='h-12 w-12 rounded-full overflow-hidden'>
-                                                    {contact.image ? (<AvatarImage src={`${HOST}/${contact.image}`} alt="profile" className="object-cover w-full h-full bg-black" />) : (<div className={` uppercase h-12 w-12 text-lg border-[1px] flex justify-center items-center rounded-full ${getColor(contact.color)}`} >
+                                                    {contact.image ? (<AvatarImage src={`${HOST}/${contact.image}`} alt="profile" className="object-cover w-full h-full bg-black rounded-full" />) : (<div className={` uppercase h-12 w-12 text-lg border-[1px] flex justify-center items-center rounded-full ${getColor(contact.color)}`} >
                                                         {contact.firstName ? contact.firstName.split("").shift() : contact.email.split("").shift()}
                                                     </div>)}
                                                 </Avatar>
