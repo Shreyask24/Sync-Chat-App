@@ -1,5 +1,6 @@
 import { useSocket } from '@/context/SocketContext';
 import { useAppStore } from '@/store';
+import { GoogleGenAI } from '@google/genai';
 import EmojiPicker from 'emoji-picker-react';
 import React, { useEffect, useRef, useState } from 'react'
 import { GrAttachment } from "react-icons/gr"
@@ -12,7 +13,13 @@ const MessageBar = () => {
 
     const [message, setMessage] = useState("");
     const [emojiPickerOpen, setEmojiPickerOpen] = useState(false);
-    const { selectedChatType, selectedChatData, userInfo } = useAppStore()
+    const { selectedChatType, selectedChatData, userInfo, setSelectedChatMessages, addMessage } = useAppStore()
+
+    const GEMINI_API = import.meta.env.VITE_GEMINI_API_KEY
+
+    const genAI = new GoogleGenAI({
+        apiKey: GEMINI_API
+    });
 
 
     useEffect(() => {
@@ -41,7 +48,40 @@ const MessageBar = () => {
                 fileUrl: undefined
             })
         }
-        console.log("Received sendMessage event with:", message);
+
+        if (selectedChatType === "ai") {
+            const userMessage = message;
+
+            // Add user message first
+            addMessage({
+                content: userMessage,
+                sender: userInfo.id,
+                messageType: "text",
+                timestamp: new Date().toISOString()
+            });
+
+            // Clear input field
+            setMessage("");
+
+            const result = await genAI.models.generateContent({
+                model: "gemini-2.0-flash",
+                contents: userMessage,
+            });
+
+            const aiReply = result?.text || "Something went wrong";
+            const formattedAiReply = aiReply.replace(/\\"/g, '"').replace(/\\n/g, '\n');
+
+            // Add AI response
+            addMessage({
+                content: formattedAiReply,
+                sender: "ai",
+                messageType: "text",
+                timestamp: new Date().toISOString()
+            });
+        }
+
+
+
     }
     return (
         <div className='h-[10vh] bg-[#1c1d25] flex justify-center items-center px-8 mb-6 gap-6'>

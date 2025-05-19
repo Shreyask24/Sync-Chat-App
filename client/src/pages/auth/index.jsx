@@ -50,28 +50,36 @@ const Auth = () => {
 
 
     const handleLogin = async () => {
-        if (validateLogin()) {
-            const response = await apiClient.post(LOGIN_ROUTE, { email, password }, { withCredentials: true })
-            if (response.data.user.id) {
-                setUserInfo(response.data.user)
-                if (response.data.user.profileSetup) navigate("/chat")
-                else navigate("/profile")
-                console.log(response.data.user.profileSetup)
+        try {
+            if (validateLogin()) {
+                const response = await apiClient.post(LOGIN_ROUTE, { email, password }, { withCredentials: true })
+                if (response.data.user.id) {
+                    setUserInfo(response.data.user)
+                    if (response.data.user.profileSetup) navigate("/chat")
+                    else navigate("/profile")
+                }
+                toast.message("User Login Successfull")
             }
-            console.log(response)
-            toast.message("User Login Successfull")
+        } catch (error) {
+            const errMsg = error?.response?.data || "Something went wrong";
+            toast.error(errMsg);
+
         }
     }
 
     const handleSignup = async () => {
-        if (validateSignup()) {
-            const response = await apiClient.post(SIGNUP_ROUTE, { email, password }, { withCredentials: true })
-            if (response.status === 201) {
-                setUserInfo(response.data.user)
-                navigate("/profile")
+        try {
+            if (validateSignup()) {
+                const response = await apiClient.post(SIGNUP_ROUTE, { email, password }, { withCredentials: true })
+                if (response.status === 201) {
+                    setUserInfo(response.data.user)
+                    navigate("/profile")
+                }
+                toast.message("User Created Successfully")
             }
-            toast.message("User Created Successfully")
-            console.log(response)
+        } catch (error) {
+            const errMsg = error?.response?.data || "Something went wrong"
+            toast.error(errMsg)
         }
 
 

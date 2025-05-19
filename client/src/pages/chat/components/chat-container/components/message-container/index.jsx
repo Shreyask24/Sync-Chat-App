@@ -1,10 +1,12 @@
 import React, { useEffect, useRef } from 'react'
 import moment from 'moment'
 import { useAppStore } from '@/store'
+import ReactMarkdown from 'react-markdown';
 
 const MessageContainer = () => {
+
     const scrollRef = useRef()
-    const { selectedChatData, selectedChatType, userInfo, selectedChatMessages } = useAppStore()
+    const { selectedChatType, selectedChatMessages } = useAppStore()
 
     useEffect(() => {
         if (scrollRef.current) {
@@ -20,6 +22,8 @@ const MessageContainer = () => {
             const showDate = messageDate !== lastDate;  // Only show the message date once if 10 msgs are sent on 25th than 25th eill see once than all 10 msgs will be shown
             lastDate = messageDate
 
+            const isUserMessage = index % 2 === 0;
+
             return (
                 <div key={index}>
                     {showDate && (
@@ -28,30 +32,33 @@ const MessageContainer = () => {
                         </div>
                     )}
                     {
-                        selectedChatType === "contact" && renderDMMessages(message)
+                        selectedChatType === "contact" && renderDMMessages(message, "") ||
+                        selectedChatType === "ai" && renderDMMessages(message, isUserMessage)
+
                     }
                 </div>
             )
         })
     }
 
-    const renderDMMessages = (message) =>
-    (
-        <div className={`${message.sender === selectedChatData._id ? "text-left" : "text-right"}`}>
-            {message.messageType === "text" && (
-                <div className={`${message.sender !== selectedChatData._id ?
-                    "bg-[#8417ff]/5 text-[#8417ff]/90 border-[#8417ff]/50" :
-                    "bg-[#202b33]/5 text-white/90 border-[#ffffff]/20"
-                    }border inline-block p-4 rounded my-1 max-w-[50%] break-words`}>
-                    {message.content}
+    const renderDMMessages = (message, isUserMessage) => (
+        <div className={`${isUserMessage ? "text-right" : "text-left"}`}>
+            {(message?.messageType === "text" || typeof message === "string") && (
+                <div className={`border inline-block p-4 rounded my-1 max-w-[50%] break-words
+                ${isUserMessage
+                        ? "bg-[#8417ff]/5 text-[#8417ff]/90 border-[#8417ff]/50"
+                        : "bg-[#202b33]/5 text-white/90 border-[#ffffff]/20"
+                    }`}
+                >
+                    <ReactMarkdown>{typeof message === "string" ? message : message.content}</ReactMarkdown>
                 </div>
             )}
 
-            <div className='text-xs text-gray-600'>
+            <div className="text-xs text-gray-600">
                 {moment(message.timestamp).format("LT")}
             </div>
         </div>
-    )
+    );
 
 
     return (

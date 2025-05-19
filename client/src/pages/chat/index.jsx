@@ -5,6 +5,7 @@ import { toast } from 'sonner';
 import ContactsContainer from './components/contacts-container';
 import EmptyChatContainer from './components/empty-chat-container';
 import ChatContainer from './components/chat-container';
+import ChatWithAI from './components/chat-ai/ChatWithAI';
 
 const Chat = () => {
     const { userInfo, selectedChatType } = useAppStore();
@@ -22,7 +23,13 @@ const Chat = () => {
         <div className="flex h-[100vh] text-white overflow-hidden">
 
             <ContactsContainer />
-            {selectedChatType === undefined ? (<EmptyChatContainer />) : (<ChatContainer />)}
+            {
+                selectedChatType === undefined
+                    ? <EmptyChatContainer />
+                    : selectedChatType === "ai"
+                        ? <ChatWithAI />
+                        : <ChatContainer />
+            }
 
         </div>
     )

@@ -6,6 +6,7 @@ import Profile from './pages/profile'
 import { useAppStore } from './store'
 import { apiClient } from './lib/api-client'
 import { GET_USER_INFO } from './utils/constants'
+import ChatWithAI from './pages/chat/components/chat-ai/ChatWithAI'
 
 
 const PrivateRoute = ({ children }) => {
@@ -37,7 +38,6 @@ const App = () => {
         } else {
           setUserInfo(undefined)
         }
-        console.log({ response })
       } catch (error) {
         setUserInfo(undefined)
         console.error(error)
@@ -54,7 +54,7 @@ const App = () => {
   }, [userInfo, setUserInfo])
 
   if (loading) {
-    return <div>Loading...</div>
+    return <div className="flex items-center justify-center h-[100dvh]">Loading...</div>
   }
 
   return (
@@ -63,6 +63,7 @@ const App = () => {
         <Route path="/auth" element={<AuthRoute><Auth /></AuthRoute>} />
         <Route path="/profile" element={<PrivateRoute><Profile /></PrivateRoute>} />
         <Route path="/chat" element={<PrivateRoute><Chat /></PrivateRoute>} />
+        <Route path="/chat-ai" element={<PrivateRoute><ChatWithAI /></PrivateRoute>} />
 
         <Route path="*" element={<Navigate to="/auth" />} />
       </Routes>

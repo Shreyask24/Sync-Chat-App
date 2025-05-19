@@ -8,6 +8,7 @@ const setupSocket = (server) => {
     const io = new SocketIOServer(server, {
         cors: {
             origin: process.env.ORIGIN,
+            // origin: process.env.FRONTEND_TEST,
             methods: ["GET", "POST"],
             credentials: true
         }

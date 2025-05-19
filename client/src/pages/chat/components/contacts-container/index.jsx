@@ -1,7 +1,19 @@
+import { Button } from "@/components/ui/button";
 import NewDM from "../chat-container/new-dm";
 import ProfileInfo from "./components/profile-info";
+import { useNavigate } from "react-router-dom";
+import ChatWithAI from "../chat-ai/ChatWithAI";
+import { useAppStore } from "@/store";
 
 const ContactsContainer = () => {
+    const { setSelectedChatType, setSelectedChatData } = useAppStore()
+
+
+    const selectNewContact = (ai) => {
+        setSelectedChatType("ai");
+        setSelectedChatData(ai);
+    }
+
     return (
         <div className="relative md:w-[35vw] lg:w-[30vw] xl:w-[20vw] bg-[#1b1c24] border-r-2 border-[#2f303b] w-full">
             <div className="pt-3">
@@ -17,6 +29,12 @@ const ContactsContainer = () => {
             <div className="my-5">
                 <div className="flex items-center justify-between pr-10">
                     <Title text="Channels" />
+                </div>
+            </div>
+
+            <div className="my-5">
+                <div className="flex items-center justify-center pr-10">
+                    <Button className="bg-[#1C1D25] w-[70%]" variant="outline" onClick={() => selectNewContact("ai")}>Chat With AI</Button>
                 </div>
             </div>
             <ProfileInfo />
