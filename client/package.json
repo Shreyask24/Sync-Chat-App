@@ -31,6 +31,7 @@
     "react-lottie": "^1.2.4",
     "react-markdown": "^8.0.6",
     "react-router-dom": "^6.26.2",
+    "remark-gfm": "^4.0.1",
     "socket.io-client": "^4.8.0",
     "sonner": "^1.5.0",
     "tailwind-merge": "^2.5.2",
